@@ -1,9 +1,9 @@
 // menuDia.js
 
 // Variables globales
-let carrito = []; // Arreglo para almacenar los productos en el carrito
-let allItems = []; // Arreglo para almacenar todos los productos del menú
-let currentCategory = "all"; // Categoría actual seleccionada ('all' por defecto)
+let carrito = []; // Carrito obtenido desde el servidor
+let allItems = []; // Productos del menú
+let currentCategory = "all"; // Categoría actual
 
 // Elementos del DOM
 const itemsGrid = document.getElementById("itemsGrid");
@@ -17,27 +17,50 @@ const puntosAcumulados = document.getElementById("puntos-acumulados");
 const cuponesDescuento = document.getElementById("cupones-descuento");
 const contadorCarrito = document.getElementById("contador-carrito");
 
+// Elementos para control de sesión
+const loginLink = document.getElementById('loginLink');
+const userIcon = document.getElementById('userIcon');
+
 // Evento cuando el contenido del DOM está cargado
-document.addEventListener("DOMContentLoaded", () => {
-  cargarMenu(); // Cargar los productos desde la API
+document.addEventListener("DOMContentLoaded", async () => {
+  // Mostrar/ocultar elementos según estado de autenticación
+  if (isAuthenticated()) {
+    loginLink.style.display = 'none';
+    logoutLink.style.display = 'inline-block';
+    // Cargar el carrito del servidor (usuario autenticado)
+    await cargarCarritoDelServidor();
+  } else {
+    loginLink.style.display = 'inline-block';
+    logoutLink.style.display = 'none';
+    actualizarCarrito(); // Vacío si no hay autenticación
+  }
+
+  await cargarMenu(); // Cargar los productos del menú
   asignarEventosCategoria(); // Asignar eventos a las categorías
-  iconoCarrito.addEventListener("click", abrirCarrito); // Abrir carrito al hacer clic en el ícono
-  cerrarCarritoBtn.addEventListener("click", cerrarCarrito); // Cerrar carrito al hacer clic en el botón
-  carritoOverlay.addEventListener("click", cerrarCarrito); // Cerrar carrito al hacer clic fuera del modal
+
+  iconoCarrito.addEventListener("click", abrirCarrito); // Abrir carrito
+  cerrarCarritoBtn.addEventListener("click", cerrarCarrito); // Cerrar carrito
+  carritoOverlay.addEventListener("click", cerrarCarrito); // Cerrar al hacer clic fuera
+
+  logoutLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    logout();
+    window.location.reload();
+  });
 });
 
 // Función para cargar el menú desde la API
 async function cargarMenu() {
   try {
     const response = await apiRequest('/menu_manager/getActiveFoodItems/', 'GET', null, false);
-    console.log("Datos recibidos de la API:", response); // Log para depuración
+    console.log("Datos recibidos de la API:", response); 
 
     if (!Array.isArray(response)) {
       throw new Error("La respuesta de la API no es un array.");
     }
 
     allItems = response; 
-    mostrarItems(allItems); // Mostrar todos los productos inicialmente
+    mostrarItems(allItems); 
   } catch (error) {
     console.error("Error al cargar el menú:", error);
     Swal.fire('Error', 'No se pudo cargar el menú del día.', 'error');
@@ -46,26 +69,21 @@ async function cargarMenu() {
 
 // Función para mostrar los productos en el grid
 function mostrarItems(items) {
-  itemsGrid.innerHTML = ""; // Limpiar el contenido actual
+  itemsGrid.innerHTML = "";
 
-  // Filtrar los productos según la categoría seleccionada
   let itemsFiltrados = currentCategory === "all" 
     ? items 
-    : items.filter(item => item.category.toLowerCase() === currentCategory.toLowerCase());
+    : items.filter(item => item.category && item.category.toLowerCase() === currentCategory.toLowerCase());
 
   if (itemsFiltrados.length === 0) {
     itemsGrid.innerHTML = `<div class="col-12"><p class="text-center">No hay elementos en esta categoría.</p></div>`;
     return;
   }
 
-  // Iterar sobre los productos filtrados y crear las tarjetas
   itemsFiltrados.forEach(item => {
-    console.log("Mostrando item:", item); // Log para cada producto
-
     const col = document.createElement("div");
     col.classList.add("col-12","col-sm-6","col-md-4","col-lg-3");
 
-    // Crear la tarjeta sin imagen
     col.innerHTML = `
       <div class="card h-100" data-id="${item.id}">
         <div class="card-body d-flex flex-column">
@@ -93,18 +111,13 @@ function asignarEventosCategoria() {
   const links = document.querySelectorAll('.categoria-link');
   links.forEach(link => {
     link.addEventListener('click', (e) => {
-      e.preventDefault(); // Evitar el comportamiento por defecto del enlace
-
+      e.preventDefault();
       const categoriaSeleccionada = link.dataset.category;
-      
-      if (!categoriaSeleccionada) {
-        console.warn("Categoría no definida para el enlace:", link);
-        return;
-      }
+      if (!categoriaSeleccionada) return;
       
       currentCategory = categoriaSeleccionada;
       console.log(`Categoría seleccionada: ${currentCategory}`);
-      mostrarItems(allItems); // Mostrar los productos filtrados
+      mostrarItems(allItems);
     });
   });
 }
@@ -137,45 +150,77 @@ function cerrarCarrito() {
   carritoOverlay.classList.add("oculto");
 }
 
+// Función para cargar el carrito desde el servidor (si autenticado)
+async function cargarCarritoDelServidor() {
+  try {
+    const data = await apiRequest('/customer/getCartItems/', 'GET', null, true);
+    // Mapear los datos a nuestro formato interno de carrito
+    carrito = data.cart_items.map(item => ({
+      id: item.name, 
+      nombre: item.name,
+      precio: item.unitPrice,
+      cantidad: item.quantity
+    }));
+
+    puntosAcumulados.textContent = data.total_points || 0;
+
+    // Cargar cupones desde el servidor
+    cuponesDescuento.innerHTML = '';
+    if (data.available_coupons && data.available_coupons.length > 0) {
+      cuponesDescuento.innerHTML = '<option value="none" selected>Ninguno</option>';
+      data.available_coupons.forEach(coupon => {
+        const discount_fraction = coupon.discount_amount;
+        const perc = (discount_fraction * 100).toFixed(0) + '%';
+        cuponesDescuento.innerHTML += `<option value="${discount_fraction}">Cupón ${perc}</option>`;
+      });
+    } else {
+      cuponesDescuento.innerHTML = '<option value="none" selected>Sin cupones</option>';
+    }
+
+    actualizarCarrito();
+  } catch (error) {
+    console.error('Error al cargar el carrito desde el servidor:', error);
+    // Si falla, asumimos carrito vacío
+    carrito = [];
+    puntosAcumulados.textContent = '0';
+    cuponesDescuento.innerHTML = '<option value="none" selected>Sin cupones</option>';
+    actualizarCarrito();
+  }
+}
+
 // Función para agregar productos al carrito
-function agregarAlCarrito(button) {
+async function agregarAlCarrito(button) {
   // Verificar si el usuario está autenticado
   if (!isAuthenticated()) {
     // Redirigir a la página de login
     window.location.href = './login.html';
-    return; // Detener la ejecución de la función
+    return;
   }
 
   const card = button.closest(".card");
-  const id = card.dataset.id; // Obtener el ID único del producto
+  const id = parseInt(card.dataset.id,10);
   const nombre = card.querySelector(".card-title").textContent;
   const precio = parseFloat(card.querySelector(".card-price").textContent.replace("$", ""));
   const cantidad = parseInt(card.querySelector(".quantity-number").textContent, 10);
 
-  console.log(`Agregando al carrito: ${nombre} (ID: ${id}), Cantidad: ${cantidad}, Precio: ${precio}`);
+  console.log(`Agregando al carrito (server): ${nombre} (ID: ${id}), Cantidad: ${cantidad}, Precio: ${precio}`);
 
-  // Verificar si el producto ya está en el carrito por su ID
-  const productoExistente = carrito.find((producto) => producto.id === id);
-
-  if (productoExistente) {
-    productoExistente.cantidad += cantidad; // Sumar la cantidad si ya existe
-    console.log(`Producto existente encontrado. Nueva cantidad: ${productoExistente.cantidad}`);
-  } else {
-    // Agregar un nuevo producto al carrito
-    carrito.push({ id, nombre, precio, cantidad });
-    console.log(`Producto nuevo agregado al carrito.`);
+  try {
+    await apiRequest('/customer/addToCart/', 'POST', { food_item: id, quantity: cantidad }, true);
+    await cargarCarritoDelServidor();
+    abrirCarrito();
+  } catch (error) {
+    console.error('Error al agregar al carrito:', error);
+    Swal.fire('Error', 'No se pudo agregar el producto al carrito.', 'error');
   }
-
-  actualizarCarrito(); // Actualizar la UI del carrito
-  abrirCarrito(); // Abrir el carrito para que el usuario vea los cambios
 }
 
-// Función para actualizar el contenido del carrito
+// Función para actualizar el contenido del carrito localmente
 function actualizarCarrito() {
-  carritoContenido.innerHTML = ""; // Limpiar el contenido actual
+  carritoContenido.innerHTML = "";
 
   let subtotal = 0;
-  let totalProductos = 0; // Contador de productos en el carrito
+  let totalProductos = 0; 
 
   carrito.forEach((producto, index) => {
     subtotal += producto.precio * producto.cantidad;
@@ -198,8 +243,6 @@ function actualizarCarrito() {
   document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
   document.getElementById("total").textContent = `$${(subtotal - descuentoTotal).toFixed(2)}`;
 
-  console.log(`Subtotal: $${subtotal.toFixed(2)}, Descuentos: $${descuentoTotal.toFixed(2)}, Total: $${(subtotal - descuentoTotal).toFixed(2)}`);
-
   // Actualizar el contador del carrito
   if (totalProductos > 0) {
     contadorCarrito.textContent = totalProductos;
@@ -210,24 +253,33 @@ function actualizarCarrito() {
 }
 
 // Función para eliminar un producto del carrito
-function eliminarDelCarrito(index) {
+async function eliminarDelCarrito(index) {
   const producto = carrito[index];
-  console.log(`Eliminando del carrito: ${producto.nombre} (ID: ${producto.id})`);
-  carrito.splice(index, 1); // Eliminar el producto del arreglo
-  actualizarCarrito(); // Actualizar la UI del carrito
+  console.log(`Eliminando del carrito (server): ${producto.nombre}`);
+
+  try {
+    await apiRequest(`/customer/deleteCartItem/${encodeURIComponent(producto.nombre)}/`, 'DELETE', null, true);
+    await cargarCarritoDelServidor();
+  } catch (error) {
+    console.error('Error al eliminar del carrito:', error);
+    Swal.fire('Error', 'No se pudo eliminar el producto del carrito.', 'error');
+  }
 }
 
 // Función para calcular descuentos basados en puntos y cupones
 function calcularDescuentos(subtotal) {
   const puntos = parseInt(puntosUtilizados.textContent, 10) || 0;
-  const cupon = cuponesDescuento.value;
+  const cuponValue = cuponesDescuento.value;
 
-  let descuentoPuntos = puntos;
+  let descuentoPuntos = puntos; // Asumiendo que cada punto equivale a $1 de descuento
   let descuentoCupon = 0;
 
-  if (cupon.includes("2%")) descuentoCupon = subtotal * 0.02;
-  if (cupon.includes("5%")) descuentoCupon = subtotal * 0.05;
-  if (cupon.includes("10%")) descuentoCupon = subtotal * 0.1;
+  if (cuponValue !== 'none') {
+    const cuponFraction = parseFloat(cuponValue);
+    if (!isNaN(cuponFraction) && cuponFraction > 0) {
+      descuentoCupon = subtotal * cuponFraction;
+    }
+  }
 
   document.getElementById("descuento-puntos").textContent = `- $${descuentoPuntos.toFixed(2)}`;
   document.getElementById("descuento-cupon").textContent = `- $${descuentoCupon.toFixed(2)}`;
@@ -235,12 +287,12 @@ function calcularDescuentos(subtotal) {
   return descuentoPuntos + descuentoCupon;
 }
 
-// Funciones para manejar puntos acumulados
+// Funciones para manejar puntos
 function decreasePoints() {
   let puntos = parseInt(puntosUtilizados.textContent, 10);
   if (puntos > 0) {
     puntosUtilizados.textContent = puntos - 1;
-    actualizarCarrito(); // Actualizar descuentos
+    actualizarCarrito();
   }
 }
 
@@ -249,6 +301,6 @@ function increasePoints() {
   let maxPuntos = parseInt(puntosAcumulados.textContent, 10);
   if (puntos < maxPuntos) {
     puntosUtilizados.textContent = puntos + 1;
-    actualizarCarrito(); // Actualizar descuentos
+    actualizarCarrito();
   }
 }

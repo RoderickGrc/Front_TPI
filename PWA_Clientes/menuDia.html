@@ -30,8 +30,10 @@
       
         <img src="./images/Ticket.png" alt="Ticket Icon" class="mx-2">
         
-        <a href="./login.html" class="btn btn-link text-dark mx-3">INICIAR SESIÓN</a>
-        <img src="./images/User.png" alt="User Icon" class="mx-2">
+        <a href="./login.html" id="loginLink" class="btn btn-link text-dark mx-3">INICIAR SESIÓN</a>
+        <a href="#" id="logoutLink" class="btn btn-link text-dark mx-3" style="display:none;">CERRAR SESIÓN</a>
+        
+        
         <div style="position: relative; display:inline-block;">
           <img id="icono-carrito" src="./images/carrito.png" alt="Carrito Icon" class="mx-2" style="cursor:pointer;"/>
           <span id="contador-carrito" class="badge bg-danger position-absolute" style="display:none; top:0; right:0;">0</span>
@@ -41,9 +43,7 @@
 
     <!-- Barra Roja con Navegación -->
     <nav class="main-nav">
-      <button class="menu-toggle" aria-expanded="false">
-          ☰ Categorías
-      </button>
+      <button class="menu-toggle" aria-expanded="false">☰ Categorías</button>
       <div class="menu-links">
           <a href="#" class="categoria-link" data-category="all">Promociones Online</a>
           <a href="#" class="categoria-link" data-category="entradas">Entradas</a>
@@ -61,42 +61,7 @@
       </div>
     </div>
 
-    <!-- Sección de Programa de Lealtad -->
-    <div class="container mt-5">
-        <!-- Programa de lealtad -->
-        <div class="mt-4 p-4 bg-light rounded">
-            <h5 class="text-center">Programa de Lealtad</h5>
-            <form>
-                <div class="row mt-3">
-                    <div class="col-md-6 text-center">
-                        <label class="form-label">Cupones de Descuento</label>
-                        <div class="d-flex justify-content-center gap-4 mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input radio-custom" type="radio" name="cupones" id="cupones-activar" value="activar">
-                                <label class="form-check-label" for="cupones-activar">Activar</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input radio-custom" type="radio" name="cupones" id="cupones-desactivar" value="desactivar">
-                                <label class="form-check-label" for="cupones-desactivar">Desactivar</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 text-center">
-                        <label class="form-label">Puntos de Descuento</label>
-                        <div class="d-flex justify-content-center gap-4 mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input radio-custom" type="radio" name="puntos" id="puntos-activar" value="activar">
-                                <label class="form-check-label" for="puntos-activar">Activar</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input radio-custom" type="radio" name="puntos" id="puntos-desactivar" value="desactivar">
-                                <label class="form-check-label" for="puntos-desactivar">Desactivar</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+    
 
         <!-- Botón Cerrar -->
         <div class="text-end mt-4 mb-5">
@@ -122,9 +87,7 @@
                   <section class="col-md-4">
                       <h5 class="footer-title">ACERCA DE</h5>
                       <ul class="list-unstyled">
-                          <li>
-                              <a href="#" class="footer-link">Oportunidades laborales</a>
-                          </li>
+                          <li><a href="#" class="footer-link">Oportunidades laborales</a></li>
                       </ul>
                   </section>
 
@@ -170,7 +133,7 @@
 
               <!-- Copyright -->
               <div class="col-md-10 text-center">
-                  <p class="footer-copyright mb-0">
+                  <p class="mb-0">
                       © Pizza Lovers, LLC. Todos los derechos reservados. El nombre
                       Pizza Lovers, logos, imágenes y marcas relacionadas son marcas
                       registradas de Pizza Lovers Inc. para Estados Unidos y Alimentos y
@@ -206,26 +169,23 @@
           <h5 class="fw-bold border-bottom pb-2">Descuentos Disponibles</h5>
           <div class="d-flex justify-content-between align-items-center">
             <p class="mb-0">Puntos Acumulados:</p>
-            <p class="mb-0">Puntos Acumulados: <span id="puntos-acumulados">20</span></p>
+            <p class="mb-0">Puntos Acumulados: <span id="puntos-acumulados">0</span></p>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
             <p class="mb-0">¿Cuántos puntos desea utilizar?</p>
             <div class="input-group" style="width: 100px;">
               <button class="btn btn-outline-secondary btn-sm" onclick="decreasePoints()">-</button>
-              <span id="puntos-utilizados" class="form-control text-center px-0">10</span>
+              <span id="puntos-utilizados" class="form-control text-center px-0">0</span>
               <button class="btn btn-outline-secondary btn-sm" onclick="increasePoints()">+</button>
             </div>
-            <p id="descuento-puntos" class="text-danger fw-bold mb-0">- $10.00</p>
+            <p id="descuento-puntos" class="text-danger fw-bold mb-0">- $0.00</p>
           </div>
       
-          <!-- Cupones de Descuento -->
+          <!-- Cupones de Descuento (se generan dinámicamente) -->
           <div class="d-flex justify-content-between align-items-center mt-3">
             <p class="mb-0">Cupones de Descuento:</p>
             <select id="cupones-descuento" class="form-select form-select-sm w-50" onchange="actualizarCarrito()">
-              <option value="none" selected>No disponibles</option>
-              <option value="2%">1 x 2%</option>
-              <option value="5%">1 x 5%</option>
-              <option value="10%">2 x 10%</option>
+              <option value="none" selected>Sin cupones</option>
             </select>
             <p id="descuento-cupon" class="text-danger fw-bold mb-0">- $0.00</p>
           </div>
@@ -265,6 +225,8 @@
               toggleButton.setAttribute("aria-expanded", !isExpanded);
               menuLinks.style.display = isExpanded ? "none" : "flex";
           });
+
+
       });
     </script>
   </body>

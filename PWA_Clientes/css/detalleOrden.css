@@ -1,0 +1,138 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #eab88586;
+    margin: 20px;
+  }
+
+
+/* Estilo para el enlace "Regresar" */
+.btn-regresar {
+  background-color: #eab88586; /* Fondo claro */
+  color: #000000; /* Texto oscuro */
+  padding: 5px 10px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 14px; /* Tamaño del texto */
+  font-weight: 500; /* Peso del texto */
+  transition: all 0.3s ease-in-out; /* Transición suave para hover */
+}
+
+.btn-regresar:hover {
+  background-color: #b72a23e3; /* Fondo más oscuro en hover */
+  color: #ffffff; /* Texto blanco en hover */
+  text-decoration: none; /* Sin subrayado */
+}
+
+.btn-regresar i {
+  font-size: 16px; /* Tamaño del ícono */
+}
+
+
+/* Contenedor del formulario */
+.form-container {
+  width: 90%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Espaciado entre inputs */
+form .form-control {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+form label {
+  font-weight: 500;
+}
+
+/* Estilo del botón */
+button {
+  background-color: #b72a23;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #9d1d1a;
+}
+
+/* Radio buttons */
+.form-check-label {
+  font-weight: 500;
+}
+
+h3 {
+  color: #000000;
+  font-size: 1.5rem;
+}
+.boton {
+  margin-top: 1rem; /* Espaciado superior opcional */
+  width: 85%;
+}
+h5.pb-2 {
+  border-bottom: none !important; /* Quitar línea bajo "Descuentos Disponibles" */
+}
+
+input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Ajuste de imágenes del carrito */
+.img-producto {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* Color de fondo de productos */
+.color-productos {
+  background: #F9EBDD;
+  margin-bottom: 1rem; /* Espacio entre productos */
+  
+  padding: 0.5rem;
+  width: 100%;
+  border-radius: 5px; /* Bordes redondeados para un diseño más limpio */
+}
+
+/* Bordes en la tabla */
+.border-bottom {
+  border-bottom: 2px solid #000000 !important;
+}
+
+.border-top {
+  border-top: 2px solid #000000 !important;
+}
+/* Caja de la sección derecha */
+.caja-derecha {
+  border: 2px solid #000; /* Borde de la caja */
+  
+  
+  padding: 20px; /* Espaciado interno */
+
+}
+/* Ajuste del tamaño del input para puntos y cupones */
+.puntos-utilizar {
+  width: 80px; /* Ancho fijo */
+  height: 30px; /* Alto fijo */
+  font-size: 14px; /* Tamaño de texto */
+  border: 1px solid #ddd; /* Borde ligero */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 0 5px; /* Relleno interno */
+  text-align: center; /* Texto centrado */
+  background-color: #f8f8f8; /* Fondo claro para diferenciar */
+  color: #000000; /* Color del texto */
+}
+.cupones{
+  width: 40%; /* Ancho fijo */
+  height: 30px; /* Alto fijo */
+  font-size: 14px; /* Tamaño de texto */
+  border: 1px solid #ddd; /* Borde ligero */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 0 5px; /* Relleno interno */
+  text-align: center; /* Texto centrado */
+  background-color: #f8f8f8; /* Fondo claro para diferenciar */
+  color: #000000; /* Color del texto */
+}

@@ -12,21 +12,21 @@
     <div class="container">
         <h1>Mis Pedidos</h1>
         <!-- Filtro con label "Estado" -->
-        <div class="filter-container">
-            <span class="filter-label">Estado:</span>
-            <select class="combobox">
+        <div class="filter-container mb-3">
+            <span class="filter-label fw-bold me-2">Estado:</span>
+            <select class="combobox form-select w-auto d-inline-block">
                 <option value="all">Todos</option>
                 <option value="in_delivery">In Delivery</option>
                 <option value="pending">En espera</option>
                 <option value="delivered">Entregado</option>
             </select>
         </div>
-        <div class="table-container">
-            <table class="table table-bordered">
+        <div class="table-container table-responsive">
+            <table class="table table-bordered text-center" id="ordersTable">
                 <thead>
                     <tr>
                         <th>Fecha</th>
-                        <th>Pedido</th>
+                        <th>ID Pedido</th>
                         <th>Total</th>
                         <th>Dirección</th>
                         <th>Estado</th>
@@ -34,54 +34,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>DD/MM/YYYY</td>
-                        <td>Raviolis Apanados</td>
-                        <td>$25.00</td>
-                        <td>Blv. del ejercito...</td>
-                        <td>In delivery</td>
-                        <td><a href="./FinalizarCompra.html" class="btn">Ver Detalles</a></td>
-                    </tr>
-                    <tr>
-                        <td>DD/MM/YYYY</td>
-                        <td>Raviolis Apanados</td>
-                        <td>$25.00</td>
-                        <td>Blv. del ejercito...</td>
-                        <td>En espera</td>
-                        <td><a href="./FinalizarCompra.html" class="btn">Ver Detalles</a></td>
-                    </tr>
-                    <tr>
-                        <td>DD/MM/YYYY</td>
-                        <td>Raviolis Apanados</td>
-                        <td>$25.00</td>
-                        <td>Blv. del ejercito...</td>
-                        <td>Entregado</td>
-                        <td><a href="./FinalizarCompra.html" class="btn">Ver Detalles</a></td>
-                    </tr>
-                    <tr>
-                        <td>DD/MM/YYYY</td>
-                        <td>Raviolis Apanados</td>
-                        <td>$25.00</td>
-                        <td>Blv. del ejercito...</td>
-                        <td>Entregado</td>
-                        <td><a href="./FinalizarCompra.html" class="btn">Ver Detalles</a></td>
-                    </tr>
-                    <tr>
-                        <td>DD/MM/YYYY</td>
-                        <td>Raviolis Apanados</td>
-                        <td>$25.00</td>
-                        <td>Blv. del ejercito...</td>
-                        <td>Entregado</td>
-                        <td><a href="./FinalizarCompra.html" class="btn">Ver Detalles</a></td>
-                    </tr>
+                    <!-- Filas generadas dinámicamente desde JS -->
                 </tbody>
             </table>
         </div>
         <div class="text-center mt-4">
             <a href="./index.html" class="btn btn-secondary" title="Cerrar esta vista">Cerrar</a>
         </div>
-        
     </div>
+
+    <!-- Scripts Comunes -->
+    <script src="../Common/js/api.js"></script>
+    <script src="../Common/js/auth.js"></script>
+    <script src="../Common/js/utils.js"></script>
+    <script src="../Common/js/constants.js"></script>
+
+    <!-- SweetAlert2 (por si se necesita mostrar alertas) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Script Específico para pedidos.html -->
+    <script src="./js/pedidos.js"></script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
