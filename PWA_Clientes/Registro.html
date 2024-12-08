@@ -2,53 +2,64 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear Cuenta - Pizza Lovers</title>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
   <link href="./css/registro.css" rel="stylesheet">
-  <title>Crear Cuenta</title>
 </head>
 <body>
 
   <main class="card container py-5">
     <!-- Sección Superior: Logo y Título -->
-    <header class="text-center mb-1 ">
+    <header class="text-center mb-1">
       <figure class="ellipse-container position-relative">
         <div class="ellipse2"></div>
         <div class="ellipse d-flex justify-content-center align-items-center">
           <img src="./images/v71_74.png" class="logo" alt="Pizza Lovers Logo">
         </div>
       </figure>
-     
+      <h2 class="fw-bold text-center">Crear Cuenta</h2>
     </header>
 
     <!-- Sección Principal -->
     <section class="row">
       <!-- Formulario -->
-      <article class="col-md-8 mb-4"> 
-        <h1 class="text-dark text-center">Crear Cuenta</h1>
-        <div class=" p-4">
+      <article class="col-md-8 mb-4">
+        <div class="p-4">
           <p class="fw-bold text-black">Datos personales:</p>
-          <form>
+          <form id="registroForm">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="nombre" class="form-label visually-hidden">Nombre</label>
-                <input type="text" class="form-control text-center" id="nombre" placeholder="Nombre">
+                <input type="text" class="form-control text-center" id="nombre" placeholder="Nombre" required>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="apellido" class="form-label visually-hidden">Apellido</label>
-                <input type="text" class="form-control text-center" id="apellido" placeholder="Apellido">
+                <input type="text" class="form-control text-center" id="apellido" placeholder="Apellido" required>
               </div>
             </div>
             <p class="fw-bold text-black">Usuario:</p>
             <div class="mb-4">
-              <label for="email" class="form-label visually-hidden">Correo Electrónico</label>
-              <input type="email" class=" form-control text-center w-75" id="email" placeholder="Correo Electrónico">
+              <label for="username" class="form-label visually-hidden">Nombre de Usuario</label>
+              <input type="text" class="form-control text-center w-75" id="username" placeholder="Nombre de Usuario" required>
             </div>
-            <div class="mb-4 ">
+            <div class="mb-4">
+              <label for="email" class="form-label visually-hidden">Correo Electrónico</label>
+              <input type="email" class="form-control text-center w-75" id="email" placeholder="Correo Electrónico" required>
+            </div>
+            <div class="mb-4">
               <label for="password" class="form-label visually-hidden">Contraseña</label>
-              <input type="password" class="form-control text-center w-75" id="password" placeholder="Contraseña">
+              <input type="password" class="form-control text-center w-75" id="password" placeholder="Contraseña" required>
+            </div>
+            <div class="mb-4">
+              <label for="confirmPassword" class="form-label visually-hidden">Confirmar Contraseña</label>
+              <input type="password" class="form-control text-center w-75" id="confirmPassword" placeholder="Confirmar Contraseña" required>
             </div>
             <button type="submit" class="btn btn_registro w-50 mt-2">Regístrate</button>
           </form>
@@ -87,6 +98,93 @@
     </section>
   </main>
 
+  <!-- Footer Section (Si aplica) -->
+  <footer class="footer bg-black text-white">
+    <div class="container">
+      <!-- Call Center Text -->
+      <section class="py-3 text-center">
+        <p class="mb-0">
+          Si deseas ordenar a través de nuestro call center llama al:
+          <strong>(503) 7201 3639</strong>
+        </p>
+      </section>
+
+      <!-- Footer Links -->
+      <nav class="py-4">
+        <div class="row text-center text-md-start">
+          <!-- Acerca de -->
+          <section class="col-md-4">
+            <h5 class="footer-title">ACERCA DE</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class="footer-link">Oportunidades laborales</a>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Servicio al cliente -->
+          <section class="col-md-4">
+            <h5 class="footer-title">Servicio al cliente</h5>
+            <ul class="list-unstyled">
+              <li><a href="./Reclamos.html" class="footer-link">Reclamos</a></li>
+              <li><a href="#" class="footer-link">Preguntas frecuentes</a></li>
+              <li><a href="#" class="footer-link">Habla con nosotros</a></li>
+              <li><a href="#" class="footer-link">Nuestras tiendas</a></li>
+            </ul>
+          </section>
+
+          <!-- Políticas -->
+          <section class="col-md-4">
+            <h5 class="footer-title">Políticas</h5>
+            <ul class="list-unstyled">
+              <li><a href="#" class="footer-link">Términos de uso</a></li>
+              <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+              <li><a href="#" class="footer-link">TT&C</a></li>
+            </ul>
+          </section>
+        </div>
+      </nav>
+
+      <!-- Divider -->
+      <hr class="footer-line" />
+
+      <!-- App and Copyright -->
+      <section class="py-3 d-flex flex-wrap align-items-center">
+        <!-- Logo Section -->
+        <div class="col-md-2 text-center mb-2 mb-md-0">
+          <p class="footer-app-link mb-2">Descarga nuestra app</p>
+          <a href="#">
+            <img
+              src="./images/Google play.png"
+              alt="Google Play"
+              class="footer-logo img-fluid"
+            />
+          </a>
+        </div>
+
+        <!-- Copyright -->
+        <div class="col-md-10 text-center">
+          <p class="footer-copyright mb-0">
+            © Pizza Lovers, LLC. Todos los derechos reservados. El nombre
+            Pizza Lovers, logos, imágenes y marcas relacionadas son marcas
+            registradas de Pizza Lovers Inc. para Estados Unidos y Alimentos y
+            Turismo S.A. de C.V. para El Salvador.
+          </p>
+        </div>
+      </section>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Scripts Comunes -->
+  <script src="../Common/js/api.js"></script>
+  <script src="../Common/js/auth.js"></script>
+  <script src="../Common/js/utils.js"></script>
+  <script src="../Common/js/constants.js"></script>
+  <!-- Script Específico para registro.html -->
+  <script src="./js/registro.js"></script>
 </body>
 </html>
